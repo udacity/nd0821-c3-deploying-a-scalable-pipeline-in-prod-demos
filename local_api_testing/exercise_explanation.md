@@ -1,0 +1,1 @@
+In this exercise we are applying the software engineering best practice of testing to our work with APIs. We do so by leveraging FastAPI's testing framework which has tight integration with the ubiquitous `pytest` module. This allows us to have confidence in the behavior of our API before deploying it to production.
