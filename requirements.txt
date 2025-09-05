@@ -1,0 +1,13 @@
+fastapi>=0.104.1
+pydantic>=2.4.2
+uvicorn>=0.24.0
+pytest>=7.4.3
+pandas>=2.1.2
+numpy>=1.26.1
+aequitas>=0.42.0
+altair>=5.1.2
+Flask>=3.0.0
+Flask-Bootstrap>=3.3.7.1
+python-multipart>=0.0.6
+httpx>=0.25.0
+httplib2>=0.22.0
