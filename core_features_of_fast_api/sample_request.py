@@ -2,19 +2,21 @@ import requests
 import json
 
 import httpx
-from typing import TypedDict, List
+from typing import TypedDict
 
 class Item(TypedDict):
     name: str
-    tags: List[str]
+    tags: list[str]  # Updated for Python 3.13 style
     item_id: int
 
+# Define data globally so it can be used in both async and sync code
+data: Item = {
+    "name": "My Item",
+    "tags": ["tag1", "tag2"],
+    "item_id": 42
+}
+
 async def main() -> None:
-    data: Item = {
-        "name": "My Item",
-        "tags": ["tag1", "tag2"],
-        "item_id": 42
-    }
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
@@ -27,6 +29,6 @@ if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
 
-r = requests.post("http://127.0.0.1:8000/items/", data=json.dumps(data))
-
-print(r.json())
+    # Also demonstrate synchronous requests
+    r = requests.post("http://127.0.0.1:8000/items/", data=json.dumps(data))
+    print(r.json())

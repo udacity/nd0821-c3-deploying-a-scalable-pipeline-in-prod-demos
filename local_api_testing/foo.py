@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel, Field
 
 app = FastAPI(
@@ -21,7 +21,7 @@ class FetchResponse(BaseModel):
 
 @app.get("/items/{item_id}", response_model=FetchResponse)
 async def get_items(
-    item_id: int = Field(..., description="The ID of the item to fetch"),
-    count: int = Field(1, ge=1, description="Number of items to fetch")
+    item_id: int = Path(..., description="The ID of the item to fetch"),
+    count: int = Query(1, ge=1, description="Number of items to fetch")
 ) -> FetchResponse:
     return FetchResponse(fetch=f"Fetched {count} of {item_id}")
