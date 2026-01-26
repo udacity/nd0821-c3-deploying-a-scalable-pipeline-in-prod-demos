@@ -37,5 +37,5 @@ Flask==0.12.2
 Flask-Bootstrap==3.3.7.1
 
 # Other utilities
-python-multipart==0.0.20
+python-multipart==0.0.22
 httplib2==0.31.0
