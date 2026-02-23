@@ -43,7 +43,7 @@ class Data(BaseModel):
 Your workspace includes:
 
 - `main.py` → Implement your FastAPI application here
-- `test_data.py` → Write tests to verify behavior
+- `test_main.py` → Write tests to verify behavior
 
 ------------------------------------------------------------------------
 
