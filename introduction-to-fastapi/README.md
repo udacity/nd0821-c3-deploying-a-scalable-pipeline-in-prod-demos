@@ -45,7 +45,10 @@ URL rather than `127.0.0.1`.
 Start the server with:
 
 ``` bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app \
+  --root-path /proxy/8000 \
+  --proxy-headers \
+  --reload
 ```
 
 After starting the server:
@@ -68,16 +71,12 @@ FastAPI automatically generates interactive API documentation.
 
 ### Workspace Environment (Important)
 
-When running inside the Workspace, you must specify the `root_path` for
-the documentation to work correctly.
-
-Start the server with:
+When running inside the Workspace, start the server with:
 
 ``` bash
 uvicorn main:app \
-  --host 0.0.0.0 \
-  --port 8000 \
   --root-path /proxy/8000 \
+  --proxy-headers \
   --reload
 ```
 
@@ -85,8 +84,8 @@ Then open:
 
     https://<workspace-domain>/proxy/8000/docs
 
-Without setting `--root-path`, the documentation may fail to load or may
-not retrieve the OpenAPI schema correctly.
+Without setting `--root-path` and `--proxy-headers`, the documentation 
+may fail to load or may not retrieve the OpenAPI schema correctly.
 
 ## What You Should Observe
 
@@ -94,7 +93,7 @@ not retrieve the OpenAPI schema correctly.
 -   Interactive API documentation is generated without additional
     configuration.
 -   Workspace environments require proxy-aware configuration
-    (`--root-path`).
+    (`--root-path` and `--proxy-headers`).
 
 You are now ready to modify `main.py` and build additional endpoints.
 
