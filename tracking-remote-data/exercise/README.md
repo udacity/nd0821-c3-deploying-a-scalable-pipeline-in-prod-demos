@@ -1,103 +1,75 @@
-# Exercise: Tracking Data Remotely with Google Drive as a DVC Remote
+# Exercise: Tracking Data Remotely with DVC
 
-In this exercise, you will track data remotely using **Google Drive** as a DVC remote storage backend.
+In this exercise, you will add a DVC remote, push a tracked file to it, and pull it back.
 
 ## Objective
 
 You will:
 
-1. Create a Google Drive folder to use as a DVC remote.
-2. Configure the remote in DVC.
-3. Track a CSV file using DVC.
-4. Push the tracked data to Google Drive.
-5. (Optional) Set the Google Drive remote as default.
+1. Add a DVC remote.
+2. Track a CSV file with DVC.
+3. Push the tracked data to the remote.
+4. Pull it back from the remote.
 
-## 1. Create a Google Drive Remote
+## 1. Create a Remote
 
-1. Create a new folder in Google Drive.
-2. Copy the folder URL.
-
-Example:
-
-    https://drive.google.com/drive/u/0/folders/0AIac4JZqHhKmUk9PDA
-
-The unique identifier is:
-
-    0AIac4JZqHhKmUk9PDA
-
-You will use this identifier in the DVC command.
-
-## 2. Add Google Drive as a DVC Remote
-
-Run:
+A DVC remote can be cloud storage (Amazon S3, Google Cloud Storage, Azure Blob Storage) or a folder outside your project. In the workspace, use a folder, so you don't need a cloud account:
 
 ```shell
-dvc remote add -d gdrive_remote gdrive://<FOLDER_ID>
+dvc remote add -d localremote /tmp/dvcstore
 ```
 
-Example:
+## 2. Track and Push Files
 
-```shell
-dvc remote add -d gdrive_remote gdrive://0AIac4JZqHhKmUk9PDA
-```
-
-This sets the Google Drive folder as your default DVC remote.
-
-## Important Note on Authentication
-
-Due to recent Google security restrictions, you may encounter:
-
-- "App blocked" errors
-- Authentication failures
-- Third-party app restrictions
-
-This happens because Google restricts unverified applications.
-
-### Possible Workarounds
-
-- Use a personal or test Google account.
-- Use Google Cloud Storage (recommended for production).
-- Use other DVC-supported remotes (AWS S3, Azure Blob Storage, etc.).
-
-## 3. Track Files in DVC
-
-If authentication succeeds, track your CSV file:
+Track the CSV file of identifiers from the previous demo and push it to the remote:
 
 ```shell
 dvc add <file.csv>
-git add <file.csv>.dvc .gitignore
+git add <file.csv>.dvc .gitignore .dvc/config
 git commit -m "Track data file with DVC"
 dvc push
 ```
 
-On first push, you will be prompted to authenticate via browser.
+## 3. Pull Files Back
 
-Complete the authentication process and paste the provided code into the terminal if required.
+Delete your copy of the file and DVC's cache, then restore the file from the remote:
+
+```shell
+rm <file.csv>
+rm -rf .dvc/cache
+dvc pull
+```
 
 ## What to Observe
 
 - Git tracks the `.dvc` file (metadata).
-- DVC pushes actual data to Google Drive.
-- Remote storage now contains your versioned dataset.
+- DVC pushes the actual data to the remote.
+- `dvc pull` restores the file from the remote.
+
+## Using Cloud Storage
+
+On your own projects, the commands are the same for a cloud remote; only the URL changes, for example `s3://<bucket>/<path>` for Amazon S3. Google Drive (`gdrive://<folder-id>`) also needs the `dvc-gdrive` package and a Google Cloud project of your own, because Google blocks DVC's built-in Google Drive app. See [DVC's Google Drive guide](https://doc.dvc.org/user-guide/data-management/remote-storage/google-drive).
 
 # Solution Reference
 
-## Add Remote
+## Add the Remote
 
 ```shell
-dvc remote add driveremote gdrive://UNIQUE_IDENTIFIER
+dvc remote add -d localremote /tmp/dvcstore
 ```
 
-## Push to Specific Remote
+## Push to a Specific Remote
+
+With more than one remote, name the one to use:
 
 ```shell
-dvc push --remote driveremote
+dvc push --remote localremote
 ```
 
-## Or Set as Default
+## Or Set It as Default
 
 ```shell
-dvc remote default driveremote
+dvc remote default localremote
 dvc push
 ```
 
@@ -106,15 +78,3 @@ dvc push
 - Git tracks metadata
 - DVC tracks large data files
 - Remote storage holds the actual dataset
-- Google Drive acts as a versioned data backend
-
-## Summary
-
-This exercise demonstrates the conceptual workflow of using Google Drive as a DVC remote.
-
-For production environments, consider using:
-
--   Google Cloud Storage
--   AWS S3
--   Azure Blob Storage
-
